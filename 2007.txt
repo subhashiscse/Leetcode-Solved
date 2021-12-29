@@ -1,0 +1,29 @@
+class Solution {
+public:
+    vector<int> findOriginalArray(vector<int>& changed) {
+        sort(changed.begin(),changed.end());
+        int sz=changed.size();
+        int i=0,j=0;
+        vector<int>ans;
+        while(i<sz && j<sz){
+            if(changed[i]*2==changed[j] && i!=j){
+                changed[j]=-1;
+                ans.push_back(changed[i]);
+                i++;
+                j++;
+            } else if(changed[i]==-1){
+                i++;
+            } else {
+                j++;
+            }
+        }
+        if(ans.size()*2 != sz) 
+            return {};
+        return ans;
+    }
+};
+
+/*
+TC: O(n+nlog(n));   // here n is the size of the main array
+SC: O(1);
+*/

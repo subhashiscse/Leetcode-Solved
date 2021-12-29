@@ -1,0 +1,56 @@
+class Solution {
+public:
+    vector<vector<int>>directions;
+    int shortestPath(vector<vector<int>>& grid, int k) {
+        directions.push_back({0,1});
+        directions.push_back({0,-1});
+        directions.push_back({1,0});
+        directions.push_back({-1,0});
+        int row=grid.size();
+        int col=grid[0].size();
+        vector<vector<vector<bool>>>vis(row,
+                                       vector<vector<bool>>(col,
+                                                           vector<bool>(k+1,false)));
+        queue<array<int,4>>q;
+        q.push({0,0,k,0});
+        while(!q.empty()){
+            int size = q.size();
+            while(size--){
+                int i=q.front()[0];
+                int j=q.front()[1];
+                int k=q.front()[2];
+                int step=q.front()[3];
+                q.pop();
+                if(vis[i][j][k] || (grid[i][j]==1 && k==0)){
+                    continue;
+                }
+                vis[i][j][k]=true;
+                if(grid[i][j]==1){
+                    k--;
+                }
+                if(i==row-1 && j==col-1){
+                    return step;
+                }
+                for(auto dir: directions){
+                    int ii=dir[0]+i;
+                    int jj=dir[1]+j;
+                    if(isValid(ii,jj,row,col) && !vis[ii][jj][k]){
+                        q.push({ii,jj,k,step+1});
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+    bool isValid(int i,int j,int n,int m){
+        if(i>=0 && i<n && j>=0 && j<m){
+            return true;
+        } 
+        return false;
+    }
+};
+
+/*
+TC: O(n*k)
+SC: O(n*k)
+*/

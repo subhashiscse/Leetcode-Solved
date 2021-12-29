@@ -1,0 +1,39 @@
+class Solution {
+public:
+    long long maxPoints(vector<vector<int>>& points) {
+        int row=points.size();
+        int col=points[0].size();
+        long long inf = -1e18;
+        vector<long long>prev(col);
+        for(int i=0;i<col;i++){
+            prev[i]=points[0][i];
+        }
+        for(int i=1;i<row;i++){
+            long long leftMax=0;
+            vector<long long>temp(col);
+            for(int j=0;j<col;j++){
+                temp[j]=prev[j];
+            }
+            for(int j=0;j<col;j++){
+                leftMax=max(leftMax-1,temp[j]);
+                long long res=leftMax+points[i][j];
+                temp[j]=res;
+            }
+            long long rightMax=0;
+            for(int j=col-1;j>=0;j--){
+                rightMax=max(rightMax-1,prev[j]);
+                long long res=rightMax+points[i][j];
+                prev[j]=max(res,temp[j]);
+            }
+        }
+        long long ans=0;
+        for(int i=0;i<col;i++){
+            ans=max(ans,prev[i]);
+        }
+        return ans;
+    }
+};
+/*
+TC: O(n*m)
+SC: O(m)
+*/
