@@ -1,0 +1,34 @@
+class Solution {
+public:
+    int numMatchingSubseq(string s, vector<string>& words) {
+        vector<int>index[26];
+        for(int i=0;i<s.size();i++){
+            index[s[i]-'a'].push_back(i);
+        }
+        int ans=0;
+        for(int i=0;i<words.size();i++){
+            string cur=words[i];
+            int prevIndex=0;
+            bool isPossible = true;
+            for(int j=0;j<cur.size();j++){
+                int curValue=cur[j]-'a';
+                int low=lower_bound(index[curValue].begin(),index[curValue].end(),prevIndex)-index[curValue].begin();
+                if(low == index[curValue].size()){
+                    isPossible = false;
+                    break;
+                } else {
+                    prevIndex=index[curValue][low]+1;
+                }
+            }
+            if(isPossible){
+                ans++;
+            }
+        }
+        return ans;
+    }
+};
+
+/*
+TC: O(n*m*logn) /// here n=words.size(),m=maxWordLength
+SC: O(26)
+*/

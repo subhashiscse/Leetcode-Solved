@@ -1,0 +1,60 @@
+class Solution {
+public:
+    string justifyLine(vector<string>& words, int width) {
+        string result = "";
+        if (words.size() == 1) {
+            result = words[0];
+            while (result.length() != width) {
+                result += " ";
+            }
+            return result;
+        }
+        int result_length = 0;
+        for (auto &s: words) {
+            result_length += s.length();
+        }
+        int i = 0;
+        while (result_length != width) {
+            words[i] += ' ';
+            result_length += 1;
+            i += 1;
+            if (i == words.size() - 1) {
+                i = 0;
+            }
+        }
+        for (auto &s: words) {
+            result += s;
+        }
+        return result;
+    }
+    
+    vector<string> fullJustify(vector<string>& words, int maxWidth) {
+        vector<string> result;
+
+        vector<string> line;
+        int line_chars = 0;
+        
+        for (auto &word: words) {
+            if (line_chars + line.size() + word.length() > maxWidth) {
+                result.push_back(justifyLine(line, maxWidth));
+                line.clear();
+                line_chars = 0;
+            }
+            line.push_back(word);
+            line_chars += word.length();
+        }
+        string last_line;
+        for (int i = 0; i < line.size(); i++) {
+            last_line += line[i];
+            if (i != line.size() - 1) {
+                last_line += ' ';
+            }
+        }
+        while (last_line.length() != maxWidth) {
+            last_line += ' ';
+        }
+        
+        result.push_back(last_line);
+        return result;
+    }
+};

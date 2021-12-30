@@ -1,0 +1,37 @@
+class Solution {
+public:
+    static bool comp(string &a,string &b){
+        return a.length()<b.length();
+    }
+    int longestStrChain(vector<string>& words) {
+        sort(words.begin(),words.end(),comp);
+        unordered_map<string, int> mp;
+        mp[words[0]] = 1;
+        int mx=1;
+        for(int i = 1; i<words.size(); i++){
+            string cur = words[i];
+            if(cur.size()==1){
+                mp[cur]=1;
+            } else {
+                int curChain=1;
+                for(int j=0;j<cur.size();j++){
+                    string newStr=cur.substr(0,j)+cur.substr(j+1);
+                    if(mp.find(newStr)!=mp.end() && mp[newStr]+1>curChain){
+                        curChain=mp[newStr]+1;
+                    }
+                }
+                mp[cur]=curChain;
+                if(curChain>mx){
+                    mx = curChain;
+                }
+            }
+        }
+        
+        return mx;
+    }
+};
+/*
+TC: O(N⋅(log⁡N+L^2))
+SC: O(N)
+Here n is the number of words and L be the maximum length of a word
+*/
