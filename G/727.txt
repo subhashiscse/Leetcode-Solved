@@ -1,0 +1,38 @@
+class Solution {
+public:
+    string minWindow(string s1, string s2) {
+        int sz1=s1.size();
+        int sz2=s2.size();
+        s1='*'+s1;
+        s2='*'+s2;
+        vector<vector<int>>dp(sz1+1,vector<int>(sz2+1,1e9));
+        for(int i=0;i<=sz1;i++){
+			dp[i][0]=0;
+		}
+        for(int i=1;i<=sz1;i++){
+            for(int j=1;j<=sz2;j++){
+                if(s1[i]==s2[j]){
+                    dp[i][j]=dp[i-1][j-1]+1;
+                } else {
+                    dp[i][j]=dp[i-1][j]+1;
+                }
+            }
+        }
+        int len=1e9,pos=-1;
+        for(int i=1;i<=sz1;i++){
+            if(dp[i][sz2]<len){
+                len=dp[i][sz2];
+                pos=i;
+            }
+        }
+        return pos==-1?"":s1.substr(pos-len+1,len);
+    }
+};
+
+/*
+TC: O(n*m);
+SC: O(n*m);
+
+Here n = first string size;
+     m = second string size;
+*/
